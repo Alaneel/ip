@@ -55,14 +55,54 @@ public class Alan {
                 } catch (NumberFormatException e) {
                     System.out.println("Please provide a valid task number.");
                 }
-            } else {
+            } else if (userInput.startsWith("todo ")) {
                 if (taskCount < 100) {
-                    tasks[taskCount] = new Task(userInput);
+                    String description = userInput.substring(5);
+                    tasks[taskCount] = new Todo(description);
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + tasks[taskCount]);
                     taskCount++;
-                    System.out.println("added: " + userInput);
+                    System.out.println("Now you have " + taskCount + " tasks in the list.");
                 } else {
                     System.out.println("Task list is full. Cannot add more tasks.");
                 }
+            } else if (userInput.startsWith("deadline ")) {
+                if (taskCount < 100) {
+                    String[] parts = userInput.split(" /by ", 2);
+                    if (parts.length == 2) {
+                        String description = parts[0].substring(9);
+                        String by = parts[1];
+                        tasks[taskCount] = new Deadline(description, by);
+                        System.out.println("Got it. I've added this task:");
+                        System.out.println("  " + tasks[taskCount]);
+                        taskCount++;
+                        System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    } else {
+                        System.out.println("Please provide a deadline in the format: deadline [description] /by [time]");
+                    }
+                } else {
+                    System.out.println("Task list is full. Cannot add more tasks.");
+                }
+            } else if (userInput.startsWith("event ")) {
+                if (taskCount < 100) {
+                    String[] parts = userInput.split(" /from | /to ", 3);
+                    if (parts.length == 3) {
+                        String description = parts[0].substring(6);
+                        String startTime = parts[1];
+                        String endTime = parts[2];
+                        tasks[taskCount] = new Event(description, startTime, endTime);
+                        System.out.println("Got it. I've added this task:");
+                        System.out.println("  " + tasks[taskCount]);
+                        taskCount++;
+                        System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    } else {
+                        System.out.println("Please provide an event in the format: event [description] /from [start] /to [end]");
+                    }
+                } else {
+                    System.out.println("Task list is full. Cannot add more tasks.");
+                }
+            } else {
+                System.out.println("Invalid command. Available commands: todo, deadline, event, list, mark, unmark, bye");
             }
 
             System.out.println(divider);
