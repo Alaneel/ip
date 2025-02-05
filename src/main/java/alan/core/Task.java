@@ -1,4 +1,6 @@
-class Task {
+package alan.core;
+
+public class Task {
     private String description;
     private boolean isDone;
 
