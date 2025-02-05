@@ -1,3 +1,5 @@
+package alan.core;
+
 public class Todo extends Task {
     public Todo(String description) {
         super(description);

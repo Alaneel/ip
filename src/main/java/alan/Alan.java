@@ -1,3 +1,11 @@
+package alan;
+
+import alan.core.Deadline;
+import alan.core.Event;
+import alan.core.Task;
+import alan.core.Todo;
+import alan.exception.*;
+
 import java.util.Scanner;
 
 public class Alan {
