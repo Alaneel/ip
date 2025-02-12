@@ -19,6 +19,7 @@ public class Alan {
     private static final String COMMAND_DEADLINE = "deadline";
     private static final String COMMAND_EVENT = "event";
     private static final String COMMAND_HELP = "help";
+    private static final String COMMAND_DELETE = "delete";
 
     private Task[] tasks;
     private int taskCount;
@@ -91,6 +92,9 @@ public class Alan {
                     break;
                 case COMMAND_HELP:
                     printAvailableCommands();
+                    break;
+                case COMMAND_DELETE:
+                    handleDelete(userInput);
                     break;
                 default:
                     throw new AlanException("I don't recognize that command. Type 'help' to see available commands.");
@@ -231,6 +235,36 @@ public class Alan {
         addTask(new Event(description, startTime, endTime));
     }
 
+    private void handleDelete(String userInput) throws AlanException {
+        String numberStr = userInput.substring(COMMAND_DELETE.length()).trim();
+
+        if (numberStr.isEmpty()) {
+            throw new InvalidTaskNumberException(taskCount);
+        }
+
+        try {
+            int taskNumber = Integer.parseInt(numberStr) - 1;
+            if (!isValidTaskIndex(taskNumber)) {
+                throw new InvalidTaskNumberException(taskCount);
+            }
+
+            Task deletedTask = tasks[taskNumber];
+
+            // Shift remaining tasks to fill the gap
+            for (int i = taskNumber; i < taskCount - 1; i++) {
+                tasks[i] = tasks[i + 1];
+            }
+            tasks[taskCount - 1] = null;
+            taskCount--;
+
+            System.out.println("Noted. I've removed this task:");
+            System.out.println("  " + deletedTask);
+            System.out.println("Now you have " + taskCount + " tasks in the list.");
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskNumberException(taskCount);
+        }
+    }
+
     private boolean isTaskListFull() {
         if (taskCount >= MAX_TASKS) {
             System.out.println("Task list is full. Cannot add more tasks.");
@@ -255,6 +289,7 @@ public class Alan {
         System.out.println("  list - Show all tasks");
         System.out.println("  mark [task number] - Mark a task as done");
         System.out.println("  unmark [task number] - Mark a task as not done");
+        System.out.println("  delete [task number] - Delete a task from the list");
         System.out.println("  bye - Exit the program");
     }
 
