@@ -6,11 +6,11 @@ import alan.core.Task;
 import alan.core.Todo;
 import alan.exception.*;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Alan {
     private static final String DIVIDER = "____________________________________________________________";
-    private static final int MAX_TASKS = 100;
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_LIST = "list";
     private static final String COMMAND_MARK = "mark";
@@ -18,16 +18,14 @@ public class Alan {
     private static final String COMMAND_TODO = "todo";
     private static final String COMMAND_DEADLINE = "deadline";
     private static final String COMMAND_EVENT = "event";
-    private static final String COMMAND_HELP = "help";
     private static final String COMMAND_DELETE = "delete";
+    private static final String COMMAND_HELP = "help";
 
-    private Task[] tasks;
-    private int taskCount;
+    private ArrayList<Task> tasks;
     private Scanner scanner;
 
     public Alan() {
-        this.tasks = new Task[MAX_TASKS];
-        this.taskCount = 0;
+        this.tasks = new ArrayList<>();
         this.scanner = new Scanner(System.in);
     }
 
@@ -90,11 +88,11 @@ public class Alan {
                 case COMMAND_EVENT:
                     handleEvent(userInput);
                     break;
-                case COMMAND_HELP:
-                    printAvailableCommands();
-                    break;
                 case COMMAND_DELETE:
                     handleDelete(userInput);
+                    break;
+                case COMMAND_HELP:
+                    printAvailableCommands();
                     break;
                 default:
                     throw new AlanException("I don't recognize that command. Type 'help' to see available commands.");
@@ -112,9 +110,6 @@ public class Alan {
             handleList();
         } catch (InvalidTimeFormatException e) {
             System.out.println("Error: " + e.getMessage());
-        } catch (TaskListFullException e) {
-            System.out.println("Error: " + e.getMessage());
-            handleList();
         } catch (InvalidTaskFormatException e) {
             System.out.println("Error: " + e.getMessage());
         } catch (AlanException e) {
@@ -133,14 +128,14 @@ public class Alan {
     }
 
     private void handleList() {
-        if (taskCount == 0) {
+        if (tasks.isEmpty()) {
             System.out.println("No tasks in the list.");
             return;
         }
 
         System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println((i + 1) + "." + tasks[i]);
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + "." + tasks.get(i));
         }
     }
 
@@ -149,37 +144,34 @@ public class Alan {
         String numberStr = userInput.substring(command.length()).trim();
 
         if (numberStr.isEmpty()) {
-            throw new InvalidTaskNumberException(taskCount);
+            throw new InvalidTaskNumberException(tasks.size());
         }
 
         try {
             int taskNumber = Integer.parseInt(numberStr) - 1;
             if (!isValidTaskIndex(taskNumber)) {
-                throw new InvalidTaskNumberException(taskCount);
+                throw new InvalidTaskNumberException(tasks.size());
             }
 
+            Task task = tasks.get(taskNumber);
             if (markAsDone) {
-                tasks[taskNumber].markAsDone();
+                task.markAsDone();
                 System.out.println("Nice! I've marked this task as done:");
             } else {
-                tasks[taskNumber].markAsNotDone();
+                task.markAsNotDone();
                 System.out.println("OK, I've marked this task as not done yet:");
             }
-            System.out.println("  " + tasks[taskNumber]);
+            System.out.println("  " + task);
         } catch (NumberFormatException e) {
-            throw new InvalidTaskNumberException(taskCount);
+            throw new InvalidTaskNumberException(tasks.size());
         }
     }
 
     private boolean isValidTaskIndex(int index) {
-        return index >= 0 && index < taskCount;
+        return index >= 0 && index < tasks.size();
     }
 
     private void handleTodo(String userInput) throws AlanException {
-        if (isTaskListFull()) {
-            throw new TaskListFullException();
-        }
-
         String description = userInput.substring(COMMAND_TODO.length()).trim();
         if (description.isEmpty()) {
             throw new EmptyDescriptionException(COMMAND_TODO);
@@ -189,10 +181,6 @@ public class Alan {
     }
 
     private void handleDeadline(String userInput) throws AlanException {
-        if (isTaskListFull()) {
-            throw new TaskListFullException();
-        }
-
         String[] parts = userInput.split(" /by ", 2);
         if (parts.length != 2) {
             throw new InvalidTaskFormatException(COMMAND_DEADLINE, "deadline [description] /by [time]");
@@ -212,10 +200,6 @@ public class Alan {
     }
 
     private void handleEvent(String userInput) throws AlanException {
-        if (isTaskListFull()) {
-            throw new TaskListFullException();
-        }
-
         String[] parts = userInput.split(" /from | /to ", 3);
         if (parts.length != 3) {
             throw new InvalidTaskFormatException(COMMAND_EVENT, "event [description] /from [start] /to [end]");
@@ -239,46 +223,29 @@ public class Alan {
         String numberStr = userInput.substring(COMMAND_DELETE.length()).trim();
 
         if (numberStr.isEmpty()) {
-            throw new InvalidTaskNumberException(taskCount);
+            throw new InvalidTaskNumberException(tasks.size());
         }
 
         try {
             int taskNumber = Integer.parseInt(numberStr) - 1;
             if (!isValidTaskIndex(taskNumber)) {
-                throw new InvalidTaskNumberException(taskCount);
+                throw new InvalidTaskNumberException(tasks.size());
             }
 
-            Task deletedTask = tasks[taskNumber];
-
-            // Shift remaining tasks to fill the gap
-            for (int i = taskNumber; i < taskCount - 1; i++) {
-                tasks[i] = tasks[i + 1];
-            }
-            tasks[taskCount - 1] = null;
-            taskCount--;
-
+            Task deletedTask = tasks.remove(taskNumber);
             System.out.println("Noted. I've removed this task:");
             System.out.println("  " + deletedTask);
-            System.out.println("Now you have " + taskCount + " tasks in the list.");
+            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
         } catch (NumberFormatException e) {
-            throw new InvalidTaskNumberException(taskCount);
+            throw new InvalidTaskNumberException(tasks.size());
         }
-    }
-
-    private boolean isTaskListFull() {
-        if (taskCount >= MAX_TASKS) {
-            System.out.println("Task list is full. Cannot add more tasks.");
-            return true;
-        }
-        return false;
     }
 
     private void addTask(Task task) {
-        tasks[taskCount] = task;
+        tasks.add(task);
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + task);
-        taskCount++;
-        System.out.println("Now you have " + taskCount + " tasks in the list.");
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
     }
 
     private void printAvailableCommands() {
