@@ -3,6 +3,10 @@ package alan.parser;
 import alan.command.*;
 import alan.exception.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 public class Parser {
     public static Command parse(String fullCommand) throws AlanException {
         if (fullCommand.isEmpty()) {
@@ -34,6 +38,11 @@ public class Parser {
                 return new DeleteCommand(parseTaskNumber(arguments));
             case "help":
                 return new HelpCommand();
+            case "find":
+                if (arguments.isEmpty()) {
+                    throw new AlanException("Please provide a date in YYYY-MM-DD format");
+                }
+                return new FindCommand(arguments);
             default:
                 throw new InvalidCommandException();
         }
@@ -61,5 +70,13 @@ public class Parser {
             throw new InvalidTaskFormatException("event", "event [description] /from [start] /to [end]");
         }
         return parts;
+    }
+
+    private static void validateDateTime(String dateTimeStr) throws AlanException {
+        try {
+            LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+        } catch (DateTimeParseException e) {
+            throw new AlanException("Date/time must be in the format: YYYY-MM-DD HHMM");
+        }
     }
 }
