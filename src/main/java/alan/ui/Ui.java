@@ -78,6 +78,8 @@ public class Ui {
         System.out.println("  deadline [description] /by [time] - Create a deadline task");
         System.out.println("  event [description] /from [start] /to [end] - Create an event");
         System.out.println("  list - Show all tasks");
+        System.out.println("  find [keyword] - Search for tasks containing the keyword");
+        System.out.println("  find /date YYYY-MM-DD - Search for tasks on a specific date");
         System.out.println("  mark [task number] - Mark a task as done");
         System.out.println("  unmark [task number] - Mark a task as not done");
         System.out.println("  delete [task number] - Delete a task from the list");
@@ -96,6 +98,21 @@ public class Ui {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
         }
+    }
+
+    public void showSearchResults(ArrayList<Task> tasks, String keyword) {
+        showDivider();
+
+        if (tasks.isEmpty()) {
+            System.out.println("No matching tasks found for '" + keyword + "'.");
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + "." + tasks.get(i));
+            }
+        }
+
+        showDivider();
     }
 
     public void close() {

@@ -28,7 +28,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return "[D]" + " " + description
+        return "[D]" + super.toString() + " " + description
                 + " (by: " + by.format(DISPLAY_FORMAT) + ")";
     }
     public String getStorageString() {

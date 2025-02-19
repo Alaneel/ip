@@ -41,7 +41,7 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + " " + description
+        return "[E]" + super.toString() + " " + description
                 + " (from: " + startTime.format(DISPLAY_FORMAT)
                 + " to: " + endTime.format(DISPLAY_FORMAT) + ")";
     }
