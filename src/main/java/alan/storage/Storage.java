@@ -14,6 +14,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
+/**
+ * Represents the storage of tasks in the hard disk.
+ */
 public class Storage {
     public static final String DATA_DIRECTORY = "data";
     public static final String DATA_FILE = "tasks.txt";
@@ -21,10 +24,26 @@ public class Storage {
 
     private final Path filePath;
 
+    /**
+     * Creates a new Storage object with the default file path.
+     */
+    public Storage() {
+        this(DATA_PATH);
+    }
+
+    /**
+     * Creates a new Storage object with the specified file path.
+     * @param filePath
+     */
     public Storage(Path filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Loads tasks from the file.
+     * @return ArrayList of tasks
+     * @throws AlanException
+     */
     public ArrayList<Task> load() throws AlanException {
         try {
             Files.createDirectories(Paths.get(DATA_DIRECTORY));
@@ -43,6 +62,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves tasks to the file.
+     * @param tasks
+     * @throws AlanException
+     */
     public void save(ArrayList<Task> tasks) throws AlanException {
         try {
             Files.createDirectories(Paths.get(DATA_DIRECTORY));
@@ -56,6 +80,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Parses a task from a string.
+     * @param line
+     * @return Task
+     */
     private Task parseTaskFromString(String line) {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
@@ -93,6 +122,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Converts a task to a string.
+     * @param task
+     * @return
+     */
     private String convertTaskToString(Task task) {
         StringBuilder sb = new StringBuilder();
 

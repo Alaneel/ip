@@ -9,10 +9,19 @@ import alan.exception.AlanException;
 import alan.exception.EmptyDescriptionException;
 import alan.exception.InvalidTimeFormatException;
 
+/**
+ * Represents a command to add a deadline task.
+ */
 public class AddDeadlineCommand extends Command {
     private final String description;
     private final String by;
 
+    /**
+     * Constructor for AddDeadlineCommand.
+     * @param description
+     * @param by
+     * @throws AlanException
+     */
     public AddDeadlineCommand(String description, String by) throws AlanException {
         if (description.isEmpty()) {
             throw new EmptyDescriptionException("deadline");
@@ -24,6 +33,13 @@ public class AddDeadlineCommand extends Command {
         this.by = by;
     }
 
+    /**
+     * Adds a deadline task to the task list.
+     * @param tasks
+     * @param ui
+     * @param storage
+     * @throws AlanException
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws AlanException {
         Task deadline = new Deadline(description, by);

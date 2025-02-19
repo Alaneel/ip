@@ -7,7 +7,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Parses user input into commands.
+ */
 public class Parser {
+    /**
+     * Parses the user input into a command.
+     * @param fullCommand
+     * @return Command
+     * @throws AlanException
+     */
     public static Command parse(String fullCommand) throws AlanException {
         if (fullCommand.isEmpty()) {
             throw new AlanException("Please enter a command. Type 'help' to see available commands.");
@@ -52,6 +61,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the task number from the user input.
+     * @param args
+     * @return int
+     * @throws AlanException
+     */
     private static int parseTaskNumber(String args) throws AlanException {
         try {
             return Integer.parseInt(args.trim()) - 1;
@@ -60,6 +75,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the deadline task description and time from the user input.
+     * @param args
+     * @return String[]
+     * @throws AlanException
+     */
     private static String[] parseDeadline(String args) throws AlanException {
         String[] parts = args.split(" /by ", 2);
         if (parts.length != 2) {
@@ -68,6 +89,12 @@ public class Parser {
         return parts;
     }
 
+    /**
+     * Parses the event task description, start time and end time from the user input.
+     * @param args
+     * @return String[]
+     * @throws AlanException
+     */
     private static String[] parseEvent(String args) throws AlanException {
         String[] parts = args.split(" /from | /to ", 3);
         if (parts.length != 3) {
@@ -76,6 +103,11 @@ public class Parser {
         return parts;
     }
 
+    /**
+     * Validates the date/time format.
+     * @param dateTimeStr
+     * @throws AlanException
+     */
     private static void validateDateTime(String dateTimeStr) throws AlanException {
         try {
             LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
