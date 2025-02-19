@@ -18,7 +18,7 @@ public class AddDeadlineCommand extends Command {
             throw new EmptyDescriptionException("deadline");
         }
         if (by.isEmpty()) {
-            throw new InvalidTimeFormatException("deadline", "YYYY-MM-DD HH:mm");
+            throw new InvalidTimeFormatException("deadline", "yyyy-MM-dd HHmm");
         }
         this.description = description;
         this.by = by;
