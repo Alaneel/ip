@@ -2,6 +2,8 @@ package alan.ui;
 
 import alan.core.Task;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -80,6 +82,20 @@ public class Ui {
         System.out.println("  unmark [task number] - Mark a task as not done");
         System.out.println("  delete [task number] - Delete a task from the list");
         System.out.println("  bye - Exit the program");
+    }
+
+    public void showTasksForDate(ArrayList<Task> tasks, LocalDate date) {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks found for " +
+                    date.format(DateTimeFormatter.ofPattern("MMM d yyyy")));
+            return;
+        }
+
+        System.out.println("Here are the tasks for " +
+                date.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ":");
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + "." + tasks.get(i));
+        }
     }
 
     public void close() {

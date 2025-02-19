@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class Storage {
@@ -64,27 +66,31 @@ public class Storage {
         boolean isDone = "1".equals(parts[1]);
         String description = parts[2];
 
-        Task task;
-        switch (type) {
-            case "T":
-                task = new Todo(description);
-                break;
-            case "D":
-                if (parts.length < 4) throw new IllegalArgumentException("Invalid deadline format");
-                task = new Deadline(description, parts[3]);
-                break;
-            case "E":
-                if (parts.length < 5) throw new IllegalArgumentException("Invalid event format");
-                task = new Event(description, parts[3], parts[4]);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown task type: " + type);
-        }
+        try {
+            Task task;
+            switch (type) {
+                case "T":
+                    task = new Todo(description);
+                    break;
+                case "D":
+                    if (parts.length < 4) throw new IllegalArgumentException("Invalid deadline format");
+                    task = new Deadline(description, parts[3]);
+                    break;
+                case "E":
+                    if (parts.length < 5) throw new IllegalArgumentException("Invalid event format");
+                    task = new Event(description, parts[3], parts[4]);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown task type: " + type);
+            }
 
-        if (isDone) {
-            task.markAsDone();
+            if (isDone) {
+                task.markAsDone();
+            }
+            return task;
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid date/time format in stored task");
         }
-        return task;
     }
 
     private String convertTaskToString(Task task) {
@@ -103,13 +109,18 @@ public class Storage {
                 .append(" | ")
                 .append(task.getDescription());
 
+        DateTimeFormatter storageFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+
         if (task instanceof Deadline) {
-            sb.append(" | ").append(((Deadline) task).getBy());
-        } else if (task instanceof Event) {
+            Deadline deadline = (Deadline) task;
             sb.append(" | ")
-                    .append(((Event) task).getStartTime())
+                    .append(deadline.getBy().format(storageFormat));
+        } else if (task instanceof Event) {
+            Event event = (Event) task;
+            sb.append(" | ")
+                    .append(event.getStartTime().format(storageFormat))
                     .append(" | ")
-                    .append(((Event) task).getEndTime());
+                    .append(event.getEndTime().format(storageFormat));
         }
 
         return sb.toString();
