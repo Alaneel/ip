@@ -1,4 +1,4 @@
-package alan;
+package alan.ui;
 
 import alan.core.Task;
 

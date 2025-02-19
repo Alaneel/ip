@@ -1,6 +1,5 @@
-package alan;
+package alan.core;
 
-import alan.core.Task;
 import alan.exception.AlanException;
 import alan.exception.InvalidTaskNumberException;
 

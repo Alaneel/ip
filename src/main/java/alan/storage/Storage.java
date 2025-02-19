@@ -1,4 +1,4 @@
-package alan;
+package alan.storage;
 
 import alan.core.Deadline;
 import alan.core.Event;
