@@ -36,7 +36,7 @@ Now you have 1 task in the list.
 
 Add tasks with specific deadlines.
 
-Format: `deadline DESCRIPTION /by YYYY-MM-DD HHMM`
+Format: `deadline DESCRIPTION /by yyyy-MM-dd HHmm`
 
 Example: `deadline submit report /by 2024-02-19 1430`
 
@@ -51,7 +51,7 @@ Now you have 2 tasks in the list.
 
 Add events with start and end times.
 
-Format: `event DESCRIPTION /from YYYY-MM-DD HHMM /to YYYY-MM-DD HHMM`
+Format: `event DESCRIPTION /from yyyy-MM-dd HHmm /to yyyy-MM-dd HHmm`
 
 Example: `event team meeting /from 2024-02-19 1000 /to 2024-02-19 1200`
 
@@ -131,7 +131,7 @@ Here are the matching tasks in your list:
 
 Find tasks occurring on a specific date.
 
-Format: `find /date YYYY-MM-DD`
+Format: `find /date yyyy-MM-dd`
 
 Example: `find /date 2024-02-19`
 
@@ -157,14 +157,14 @@ Bye. Hope to see you again soon!
 | Command | Format | Example |
 |---------|--------|---------|
 | Add Todo | `todo DESCRIPTION` | `todo read chapter 3` |
-| Add Deadline | `deadline DESCRIPTION /by YYYY-MM-DD HHMM` | `deadline submit report /by 2024-02-19 1430` |
-| Add Event | `event DESCRIPTION /from YYYY-MM-DD HHMM /to YYYY-MM-DD HHMM` | `event team meeting /from 2024-02-19 1000 /to 2024-02-19 1200` |
+| Add Deadline | `deadline DESCRIPTION /by yyyy-MM-dd HHmm` | `deadline submit report /by 2024-02-19 1430` |
+| Add Event | `event DESCRIPTION /from yyyy-MM-dd HHmm /to yyyy-MM-dd HHmm` | `event team meeting /from 2024-02-19 1000 /to 2024-02-19 1200` |
 | List Tasks | `list` | `list` |
 | Mark Done | `mark INDEX` | `mark 1` |
 | Mark Not Done | `unmark INDEX` | `unmark 1` |
 | Delete | `delete INDEX` | `delete 1` |
 | Find by Keyword | `find KEYWORD` | `find meeting` |
-| Find by Date | `find /date YYYY-MM-DD` | `find /date 2024-02-19` |
+| Find by Date | `find /date yyyy-MM-dd` | `find /date 2024-02-19` |
 | Exit | `bye` | `bye` |
 
 ## Data Storage
