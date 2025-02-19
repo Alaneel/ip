@@ -13,12 +13,21 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a command to find tasks based on a search term or date.
+ */
 public class FindCommand extends Command {
     private final String searchTerm;
     private final boolean isDateSearch;
     private LocalDate targetDate;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    /**
+     * Creates a new FindCommand with the specified search term and search type.
+     * @param searchTerm
+     * @param isDateSearch
+     * @throws AlanException
+     */
     public FindCommand(String searchTerm, boolean isDateSearch) throws AlanException {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
             throw new AlanException("The search term cannot be empty.");
@@ -36,6 +45,12 @@ public class FindCommand extends Command {
         }
     }
 
+    /**
+     * Executes the command to find tasks based on the search term or date.
+     * @param tasks
+     * @param ui
+     * @param storage
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         if (isDateSearch) {
@@ -45,6 +60,11 @@ public class FindCommand extends Command {
         }
     }
 
+    /**
+     * Finds tasks based on the target date.
+     * @param tasks
+     * @param ui
+     */
     private void findByDate(TaskList tasks, Ui ui) {
         ArrayList<Task> matchingTasks = new ArrayList<>();
 
@@ -69,6 +89,11 @@ public class FindCommand extends Command {
         ui.showTasksForDate(matchingTasks, targetDate);
     }
 
+    /**
+     * Finds tasks based on the search term.
+     * @param tasks
+     * @param ui
+     */
     private void findByKeyword(TaskList tasks, Ui ui) {
         ArrayList<Task> matchingTasks = tasks.getTasks().stream()
                 .filter(task -> task.getDescription().toLowerCase()

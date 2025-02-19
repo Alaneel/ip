@@ -7,11 +7,17 @@ import alan.parser.Parser;
 import alan.storage.Storage;
 import alan.ui.Ui;
 
+/**
+ * Alan is a personal assistant chatbot that helps to keep track of various tasks.
+ */
 public class Alan {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
 
+    /**
+     * Constructor for Alan.
+     */
     public Alan() {
         this.ui = new Ui();
         this.storage = new Storage(Storage.DATA_PATH);
@@ -23,6 +29,9 @@ public class Alan {
         }
     }
 
+    /**
+     * Runs the Alan program.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
@@ -42,6 +51,10 @@ public class Alan {
         }
     }
 
+    /**
+     * Main method for Alan.
+     * @param args
+     */
     public static void main(String[] args) {
         new Alan().run();
     }
