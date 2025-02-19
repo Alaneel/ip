@@ -29,7 +29,7 @@ public class AddEventCommand extends Command {
             throw new EmptyDescriptionException("event");
         }
         if (startTime.isEmpty() || endTime.isEmpty()) {
-            throw new InvalidTimeFormatException("event", "YYYY-MM-DD HH:mm");
+            throw new InvalidTimeFormatException("event", "yyyy-MM-dd HHmm");
         }
         this.description = description;
         this.startTime = startTime;

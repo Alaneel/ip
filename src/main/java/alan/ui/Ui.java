@@ -123,8 +123,8 @@ public class Ui {
     public void showHelp() {
         System.out.println("Available commands:");
         System.out.println("  todo [description] - Create a todo task");
-        System.out.println("  deadline [description] /by [time] - Create a deadline task");
-        System.out.println("  event [description] /from [start] /to [end] - Create an event");
+        System.out.println("  deadline [description] /by [time] (format: yyyy-MM-dd HHmm) - Create a deadline task");
+        System.out.println("  event [description] /from [start] (format: yyyy-MM-dd HHmm) /to [end] (format: yyyy-MM-dd HHmm) - Create an event");
         System.out.println("  list - Show all tasks");
         System.out.println("  find [keyword] - Search for tasks containing the keyword");
         System.out.println("  find /date YYYY-MM-DD - Search for tasks on a specific date");

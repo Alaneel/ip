@@ -49,7 +49,7 @@ public class Parser {
                 return new HelpCommand();
             case "find":
                 if (arguments.isEmpty()) {
-                    throw new AlanException("Please specify what to find. Use '/date YYYY-MM-DD' for date search or keywords for description search.");
+                    throw new AlanException("Please specify what to find. Use '/date yyyy-MM-dd' for date search or keywords for description search.");
                 }
                 if (arguments.startsWith("/date ")) {
                     return new FindCommand(arguments.substring(6).trim(), true);
